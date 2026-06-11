@@ -5,7 +5,7 @@ import requests
 
 # --- PREMIUM PAGE CONFIGURATION ---
 st.set_page_config(
-    page_title="2026 WORLD CUP MASTER INTEL", 
+    page_title="2026 WORLD CUP ", 
     page_icon="🏆", 
     layout="wide",
     initial_sidebar_state="expanded"
