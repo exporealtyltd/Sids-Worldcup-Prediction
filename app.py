@@ -52,6 +52,13 @@ st.html("""
             margin-top: 20px;
             color: #cbd5e1;
         }
+        .lock-box {
+            background-color: #1e293b; 
+            padding: 20px; 
+            border-left: 5px solid #ff4b4b; 
+            border-radius: 5px; 
+            margin-bottom: 20px;
+        }
     </style>
 """)
 
@@ -132,92 +139,4 @@ base_world_cup_teams = {
     "Sweden": {"off": 1.7, "def": 1.1, "form_mod": 1.0}, "Tunisia": {"off": 1.1, "def": 1.4, "form_mod": 1.0},
     "Belgium": {"off": 2.3, "def": 1.0, "form_mod": 1.0}, "Egypt": {"off": 1.7, "def": 1.2, "form_mod": 1.0},
     "Iran": {"off": 1.2, "def": 1.2, "form_mod": 1.0}, "New Zealand": {"off": 1.0, "def": 1.8, "form_mod": 1.0},
-    "Spain": {"off": 2.8, "def": 0.6, "form_mod": 1.0}, "Uruguay": {"off": 2.5, "def": 0.8, "form_mod": 1.0},
-    "Saudi Arabia": {"off": 1.2, "def": 1.9, "form_mod": 1.0}, "Cabo Verde": {"off": 1.1, "def": 2.0, "form_mod": 1.0},
-    "France": {"off": 3.1, "def": 0.6, "form_mod": 1.0}, "Senegal": {"off": 1.8, "def": 1.1, "form_mod": 1.0},
-    "Norway": {"off": 2.2, "def": 1.3, "form_mod": 1.0}, "Iraq": {"off": 1.1, "def": 1.7, "form_mod": 1.0},
-    "Argentina": {"off": 3.0, "def": 0.6, "form_mod": 1.0}, "Algeria": {"off": 1.6, "def": 1.3, "form_mod": 1.0},
-    "Austria": {"off": 1.9, "def": 1.1, "form_mod": 1.0}, "Jordan": {"off": 1.0, "def": 2.1, "form_mod": 1.0},
-    "Portugal": {"off": 2.8, "def": 0.7, "form_mod": 1.0}, "Colombia": {"off": 2.3, "def": 0.9, "form_mod": 1.0},
-    "Uzbekistan": {"off": 1.2, "def": 1.6, "form_mod": 1.0}, "DR Congo": {"off": 1.3, "def": 1.5, "form_mod": 1.0},
-    "England": {"off": 2.7, "def": 0.7, "form_mod": 1.0}, "Croatia": {"off": 1.7, "def": 1.0, "form_mod": 1.0},
-    "Ghana": {"off": 1.9, "def": 1.3, "form_mod": 1.0}, "Panama": {"off": 1.1, "def": 1.8, "form_mod": 1.0}
-}
-
-# BRANDED HEADERS VIA SAFE NATIVE STRUCTS
-st.title("🏆 QUANTUM WORLD CUP QUANT DATA")
-st.caption("PRO-TIER BETTING BLUEPRINTS & SIMULATION SYSTEMS")
-
-# --- NAVIGATION SIDEBAR ---
-st.sidebar.markdown("### 🖥️ CONTROL TERMINAL")
-view_mode = st.sidebar.radio("Navigate Views:", ["📈 Opening Round Cheat Sheets", "🤖 Algorithmic Monte Carlo Sim"])
-
-if view_mode == "📈 Opening Round Cheat Sheets":
-    st.markdown("### 📋 24-Game Opening Round Master Matrix")
-    
-    days = list(opening_round_schedule.keys())
-    selected_day = st.selectbox("📅 Select Tournament Slate:", days)
-    
-    st.subheader(f"📅 Projections for {selected_day}")
-    
-    day_matches = opening_round_schedule[selected_day]
-    parsed_table = []
-    for match in day_matches:
-        parsed_table.append({
-            "Match Event": match["match"],
-            "Group": match["group"],
-            "Proj Score": match["score"],
-            "Value Angle (Best Market)": match["market"],
-            "High-Conviction Prop": match["prop"]
-        })
-    
-    st.dataframe(pd.DataFrame(parsed_table), use_container_width=True, hide_index=True)
-    
-    st.html("""
-        <div class="value-box">
-            <strong>💎 Anchor Slates:</strong> 
-            <span>Cross-parlay Germany -2.5, Uruguay ML, and Ghana ML for highly optimized value padding.</span>
-        </div>
-    """)
-
-else:
-    st.markdown("### 🤖 10,000-Iteration Generative Model Matrix")
-    available_countries = sorted(list(base_world_cup_teams.keys()))
-    
-    c1, c2 = st.columns(2)
-    with c1:
-        team_a = st.selectbox("Side A (Favorite Profile)", available_countries, index=available_countries.index("USA") if "USA" in available_countries else 0)
-    with c2:
-        team_b = st.selectbox("Side B (Underdog Profile)", available_countries, index=available_countries.index("Paraguay") if "Paraguay" in available_countries else 1)
-        
-    if st.button("🚀 Calculate Generative Odds"):
-        stats_a = base_world_cup_teams[team_a]
-        stats_b = base_world_cup_teams[team_b]
-        
-        lambda_a = (stats_a["off"] * stats_a["form_mod"]) * (stats_b["def"]) / 1.5
-        lambda_b = (stats_b["off"] * stats_b["form_mod"]) * (stats_a["def"]) / 1.5
-        
-        sim_a = np.random.poisson(lambda_a, 10000)
-        sim_b = np.random.poisson(lambda_b, 10000)
-        
-        w_a = np.sum(sim_a > sim_b) / 10000
-        dr = np.sum(sim_a == sim_b) / 10000
-        w_b = np.sum(sim_a < sim_b) / 10000
-        
-        o25 = np.sum((sim_a + sim_b) > 2.5) / 10000
-        u25 = np.sum((sim_a + sim_b) < 2.5) / 10000
-        btts = np.sum((sim_a > 0) & (sim_b > 0)) / 10000
-        
-        st.markdown(f"#### 🎯 Probabilities Blueprint: **{team_a} vs {team_b}**")
-        m1, m2, m3 = st.columns(3)
-        m1.metric(f"{team_a} Win", f"{w_a*100:.1f}%")
-        m2.metric("Draw Factor", f"{dr*100:.1f}%")
-        m3.metric(f"{team_b} Win", f"{w_b*100:.1f}%")
-        
-        st.markdown(f"### 📊 Most Probable Scoreline: `{round(np.mean(sim_a))} - {round(np.mean(sim_b))}`")
-        
-        st.subheader("💰 Smart Derivative Lines")
-        p1, p2, p3 = st.columns(3)
-        p1.metric("Over 2.5 Match Goals", f"{o25*100:.1f}%")
-        p2.metric("Under 2.5 Match Goals", f"{u25*100:.1f}%")
-        p3.metric("Both Teams to Score", f"{btts*100:.1f}%")
+    "Spain": {"off": 2.8, "def": 0.6, "form_mod": 1.0}, "Uruguay":
