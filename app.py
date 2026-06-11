@@ -11,43 +11,49 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CUSTOM CSS INJECTION FOR PREMIUM LOOK ---
-st.markdown("""
+# --- NATIVE PREMIUM UI STYLING CONTAINER ---
+st.html("""
     <style>
-        /* Main background and font styling */
-        .main {
-            background-color: #0e1117;
+        html, body, [data-testid="stAppViewContainer"] {
+            background-color: #0e1117 !important;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
-        /* Metric Card Styling */
         div[data-testid="stMetricValue"] {
-            font-size: 2rem !important;
+            font-size: 2.2rem !important;
             color: #00ffcc !important;
-            font-weight: 700;
+            font-weight: 700 !important;
         }
         div[data-testid="stMetricLabel"] {
             font-size: 0.9rem !important;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
             color: #a3a8b4 !important;
         }
-        /* Custom Header Banners */
-        .main-header {
-            font-size: 2.5rem;
+        .main-title {
+            font-size: 2.6rem;
             font-weight: 800;
             color: #ffffff;
-            margin-bottom: 5px;
+            margin-bottom: 0px;
             letter-spacing: -1px;
         }
-        .sub-header {
-            font-size: 1.1rem;
+        .subtitle-banner {
+            font-size: 1.0rem;
             color: #00ffcc;
             margin-bottom: 25px;
             text-transform: uppercase;
             letter-spacing: 2px;
+            font-weight: 600;
+        }
+        .value-box {
+            background-color: #1e293b; 
+            padding: 15px; 
+            border-left: 4px solid #00ffcc; 
+            border-radius: 4px; 
+            margin-top: 20px;
+            color: #cbd5e1;
         }
     </style>
-""", unsafe_content_html=True)
+""")
 
 # --- SECURE API CONFIGURATION ---
 API_KEY = "def0410353msh4f0c9e999c853b2p19875fjsne44396d20fe1" 
@@ -68,7 +74,7 @@ def fetch_live_world_cup_data():
 
 live_tournament_feed = fetch_live_world_cup_data()
 
-# --- HARDCODED 24-GAME OPENING ROUND DIRECTORY ---
+# --- OFFICIAL 24-GAME OPENING ROUND DIRECTORY ---
 opening_round_schedule = {
     "Thursday, June 11": [
         {"match": "Mexico vs South Africa", "group": "Group A", "score": "1–0", "market": "Mexico ML & Under 2.5", "prop": "S. Giménez Anytime Goal"},
@@ -138,9 +144,9 @@ base_world_cup_teams = {
     "Ghana": {"off": 1.9, "def": 1.3, "form_mod": 1.0}, "Panama": {"off": 1.1, "def": 1.8, "form_mod": 1.0}
 }
 
-# BRANDED HEADERS
-st.markdown('<div class="main-header">🏆 QUANTUM WORLD CUP QUANT DATA</div>', unsafe_content_html=True)
-st.markdown('<div class="sub-header">PRO-TIER BETTING BLUEPRINTS & SIMULATION SYSTEMS</div>', unsafe_content_html=True)
+# BRANDED HEADERS VIA SECURE RAW TEXT BLOCKS
+st.markdown('<h1 class="main-title">🏆 QUANTUM WORLD CUP QUANT DATA</h1>', unsafe_content_html=True)
+st.markdown('<p class="subtitle-banner">PRO-TIER BETTING BLUEPRINTS & SIMULATION SYSTEMS</p>', unsafe_content_html=True)
 
 # --- NAVIGATION SIDEBAR ---
 st.sidebar.markdown("### 🖥️ CONTROL TERMINAL")
@@ -152,7 +158,8 @@ if view_mode == "📈 Opening Round Cheat Sheets":
     days = list(opening_round_schedule.keys())
     selected_day = st.selectbox("📅 Select Tournament Slate:", days)
     
-    # Generate Table Data Dynamic
+    st.subheader(f"📅 Projections for {selected_day}")
+    
     day_matches = opening_round_schedule[selected_day]
     parsed_table = []
     for match in day_matches:
@@ -166,12 +173,12 @@ if view_mode == "📈 Opening Round Cheat Sheets":
     
     st.dataframe(pd.DataFrame(parsed_table), use_container_width=True, hide_index=True)
     
-    st.markdown("""
-        <div style="background-color: #1e293b; padding: 15px; border-left: 4px solid #00ffcc; border-radius: 4px; margin-top: 20px;">
-            <span style="color: #ffffff; font-weight: bold;">💎 Anchor Slates:</span> 
-            <span style="color: #cbd5e1;">Cross-parlay Germany -2.5, Uruguay ML, and Ghana ML for highly optimized value padding.</span>
+    st.html("""
+        <div class="value-box">
+            <strong>💎 Anchor Slates:</strong> 
+            <span>Cross-parlay Germany -2.5, Uruguay ML, and Ghana ML for highly optimized value padding.</span>
         </div>
-    """, unsafe_content_html=True)
+    """)
 
 else:
     st.markdown("### 🤖 10,000-Iteration Generative Model Matrix")
@@ -201,7 +208,6 @@ else:
         u25 = np.sum((sim_a + sim_b) < 2.5) / 10000
         btts = np.sum((sim_a > 0) & (sim_b > 0)) / 10000
         
-        # Display Output Metrics with stunning layout
         st.markdown(f"#### 🎯 Probabilities Blueprint: **{team_a} vs {team_b}**")
         m1, m2, m3 = st.columns(3)
         m1.metric(f"{team_a} Win", f"{w_a*100:.1f}%")
