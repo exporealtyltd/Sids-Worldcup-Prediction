@@ -220,7 +220,7 @@ else:
         p1, p2, p3 = st.columns(3)
         p1.metric("Over 2.5 Match Goals", f"{o25*100:.1f}%")
         p2.metric("Under 2.5 Match Goals", f"{u25*100:.1f}%")
-        p3.metric("Both Teams to Score", f"{btts*100:.1f}%")    headers = {"X-RapidAPI-Key": API_KEY, "X-RapidAPI-Host": API_HOST}
+        p3.metric("Both Teams to Score", f"{btts*100:.1f}%")    
     try:
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
